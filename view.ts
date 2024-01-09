@@ -1,19 +1,19 @@
 import { ItemView, TFile, WorkspaceLeaf } from "obsidian";
 
-export const VIEW_TYPE_EXAMPLE = "example-view";
+export const VIEW_TYPE_TREE = "tree-view";
 
-export class ExampleView extends ItemView {
+export class TreeView extends ItemView {
 	file: TFile;
 	constructor(leaf: WorkspaceLeaf) {
 		super(leaf);
 	}
 
 	getViewType() {
-		return VIEW_TYPE_EXAMPLE;
+		return VIEW_TYPE_TREE;
 	}
 
 	getDisplayText() {
-		return "Example view";
+		return "Tree view";
 	}
 
 	async onOpen() {

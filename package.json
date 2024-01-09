@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-sample-plugin",
-	"version": "1.0.0",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"name": "obsidian-links-tree",
+	"version": "1.0.1",
+	"description": "Draws tree of outgoing links for current note",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",

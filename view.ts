@@ -1,3 +1,4 @@
+import { link } from "fs";
 import { ItemView, TFile, WorkspaceLeaf } from "obsidian";
 
 export const VIEW_TYPE_TREE = "tree-view";
@@ -56,6 +57,7 @@ export class TreeView extends ItemView {
 	): Promise<void> {
 		const fileCache = this.app.metadataCache.getFileCache(file);
 		const fileLinks = fileCache?.links;
+		console.log(fileLinks);
 
 		if (!fileLinks) return;
 		// Skip self-referencing links
@@ -63,20 +65,28 @@ export class TreeView extends ItemView {
 			(link) => link.link !== this.file.basename
 		);
 		// make unique
-		const uniqueLinks = [
-			...new Set(fileLinksWithoutBaseFile.map((link) => link.link)),
-		];
+		// const uniqueLinks = [
+		// 	...new Set(fileLinksWithoutBaseFile.map((link) => link.link)),
+		// ];
+		var linksHM = new Map();
+		fileLinksWithoutBaseFile.forEach((link) => {
+			if (!linksHM.has(link.link)) {
+				linksHM.set(link.link, link );
+			}
+		});
+		const uniquelinks = Array.from(linksHM.values());
+		console.log(uniquelinks);
 
-		for (const fileLink of uniqueLinks) {
+		for (const fileLink of uniquelinks) {
 			const listItem = parentElement.createEl("li");
-			const linkText: string = fileLink;
+			const linkText: string = fileLink.link;
 			const linkedFile = this.app.metadataCache.getFirstLinkpathDest(
 				linkText,
 				file.path
 			);
 
 			const linkedFileItem = this.app.metadataCache.getFirstLinkpathDest(
-				fileLink,
+				linkText,
 				file.path
 			);
 
@@ -123,9 +133,9 @@ export class TreeView extends ItemView {
 					}
 				);
 			}
-
+			
 			// Create a button to open the link in the editor
-			const openButton = listItem.createEl("a", { text: linkText });
+			const openButton = listItem.createEl("a", { text: fileLink.displayText });
 			openButton.addEventListener("click", (event: MouseEvent) => {
 				event.stopPropagation();
 
